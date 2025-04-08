@@ -9,12 +9,12 @@ data = response.json()["bodies"]
 # Filter planets by englishName
 planets = ["Mercury", "Venus", "Earth", "Mars"]
 df = pd.DataFrame([
-    {"Planet": p["englishName"], "Mass (kg)": p["mass"]["massValue"] * 10 ** p["mass"]["massExponent"],
+    {"Planet": p["englishName"], "Mass (kg)": p["mass"]["massValue"] * (10 ** p["mass"]["massExponent"]),
      "Distance (AU)": p["semimajorAxis"] / 1.496e8, "Period (days)": p["sideralOrbit"]}
     for p in data if p["englishName"] in planets
 ])
 
-# Round Distance (AU) for clarity
+# Round and sort by Distance (AU)
 df["Distance (AU)"] = df["Distance (AU)"].round(3)
 df = df.sort_values("Distance (AU)")
 
@@ -25,4 +25,3 @@ df["Force (N)"] = G * (sun_mass * df["Mass (kg)"]) / (df["Distance (AU)"] * 1.49
 
 # Display table
 print(df[["Planet", "Mass (kg)", "Distance (AU)", "Force (N)"]].to_string(index=False))
-# Learned: Pandas + API = dynamic solar system stats
